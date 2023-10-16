@@ -1,0 +1,15 @@
+{
+  "name": "projet_init_npm",
+  "version": "1.0.0",
+  "description": "projet de test de l'initialisation de npm",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Maxime Authié",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
