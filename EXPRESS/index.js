@@ -8,13 +8,25 @@ const app = express();
 const hostname = '127.0.0.1';
 const port = 3000;
 
+//? Délaration d'un variable pour comptabiliser les vuies sur notre serveur
+let views = 0;
+
 //? On importe l'utilistaire 'path' dans une constante
 const path = require('path');
-// const { send } = require('process');
+
+//? on importe express-session pour la gestion 
+const session = require('express-session');
 
 //? On paramètre Express pour gérer le body des requêtes POST
 app.use(express.json()) // Pour gérer le body en json
 app.use(express.urlencoded({ extended: true })) // Pour gérer le body des formulaires
+
+//? On déclare le middleware express-session pour l'utiliser sur l'ensemble des routes
+app.use(session({ 
+    secret: '2n3iTbiFfkFTYAJ29Yyyu2qANvH2zAxR',
+    resave: false,
+    saveUninitialized: true,
+}));
 
 //? On créé un middleware qui sera appliqué à toute les routes
 const logRequest = (req, res, next) => {
@@ -30,7 +42,16 @@ app.use(express.static('public'));
 
 //? On gère nos routes statiques
 app.get('/', logRequest, (req, res) => {
-    res.send('Hello world');
+
+    //? On créé la varaible de session "views" si elle n'existe pas déjà
+    if (!req.session.views) {
+        req.session.views = 0;
+    }
+
+    //? On incrémente la variable de session "views"
+    req.session.views++;
+
+    res.send(`Hello world - Vius avez consulté cette page ${req.session.views} fois`);
 });
 
 app.get('/bonjour', (req, res) => {
