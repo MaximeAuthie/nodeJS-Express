@@ -1,0 +1,13 @@
+<%- include('../templates/header.ejs') %>
+
+<h1>Liste des articles</h1>
+
+<ul>
+    <% posts.forEach((post) => { %>
+        <li>
+            <%= post.title %> (<%= post.category ? post.category : 'N/C' %>)
+        </li>
+    <%})%>
+</ul>
+
+<%- include('../templates/footer.ejs') %>

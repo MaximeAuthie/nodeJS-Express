@@ -18,8 +18,7 @@ const port = 3000;
 
 const articles = [
     {
-        title       : 'Débuter avec node.js', 
-        category    : 'Développement web'
+        title       : 'Débuter avec node.js'
     },
     {
         title       : 'Node.js vs PHP', 
@@ -37,15 +36,15 @@ const articles = [
 
 //? Router
 app.get('/', (req, res) => {
-    res.render('home');
+    res.render('pages/home');
 });
 
 app.get('/hello/:name', (req, res)  => {
-    res.render('hello', { name: req.params.name });
+    res.render('pages/hello', { name: req.params.name });
 });
 
 app.get('/posts', (req, res) => {
-    res.render('posts-list', { posts: articles});
+    res.render('pages/posts-list', { posts: articles});
 });
 
 //? Ecouter le port du serveur au  démarrrage du serveur
