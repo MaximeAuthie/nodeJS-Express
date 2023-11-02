@@ -11,6 +11,6 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId, //? Ici on stocke un objectId (type des ID dans MongoDB)
         ref: 'User'
     }
-});
+}, {timestamps: true});
 
 module.exports = mongoose.model('Post', postSchema);

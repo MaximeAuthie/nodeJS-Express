@@ -97,7 +97,7 @@ async function main() {
 
     // //? Récupérer les utilisateurs
     // const jean = await User.findOne({ firstName: "Jean" });
-    // const alice = await User.findOne({ firstName: "Alice" });
+    const alice = await User.findOne({ firstName: "Alice" });
     // console.log(jean, alice);
 
     // //? Créer les articles (posts)
@@ -115,10 +115,21 @@ async function main() {
     //     author: alice._id
     // });
     
-const posts = await Post.find().populate('author');
-console.log(posts);
+    // const posts = await Post.find().populate('author');
+    // console.log(posts);
 
 
+    //! GERER LES TIMESTAMPS
+
+    // await Post.create({
+    //     title: "Débuter en CSS",
+    //     content: "...",
+    //     status: "Brouillon",
+    //     author: alice._id
+    // });
+
+    await Post.updateMany({}, {content: "vide"});
+    
     //! DECONNECTER LA BDD
 
 
