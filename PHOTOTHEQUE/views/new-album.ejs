@@ -5,6 +5,26 @@
     </head>
     <body>
         <%- include('partials/nav') %>
+
+        <div class="container">
+            <div class="row mt-4">
+                <div class="col">
+                    <h1>Nouvel album</h1>
+                </div>
+            </div>
+            <div  class="row">
+                <div class="col">
+                    <form method="post" action="/albums/create">
+                        <div class="form-group">
+                            <label for="albumTitle">Titre</label>
+                            <input class="form-control" type="text" name="albumTitle" placeholder="Titre de votre nouvel album" autofocus>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-4">Créer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <%- include('partials/scripts') %>
     </body>
 </html>
