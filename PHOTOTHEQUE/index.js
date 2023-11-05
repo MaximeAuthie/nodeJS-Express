@@ -2,6 +2,12 @@
 const express = require("express");
 const app = express();
 
+//? Importer Express-session
+const session = require('express-session');
+
+//? Importer Flash (pour la gestiond es message d'erreur entre contrôleur et vue)
+const flash = require('connect-flash');
+
 //? Importer Mongoose
 const mongoose = require('mongoose');
 
@@ -30,6 +36,18 @@ app.set('views', path.join(__dirname, 'views'));
 
 //? Déclarer le dossier  qui contieent les fichiers statiques du projet
 app.use(express.static('public'));
+
+//? Paramétrer Express-session
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+  secret: 'hWogB3lmrirYAZF9gUIV2ApykyBnk9W5',
+  resave: false,
+  saveUninitialized: true,
+//   cookie: { secure: true } //Ne fonctionne pas en localhost car pas de SSL
+}))
+
+//? Paramétrer Flash
+app.use(flash()); // Pas besoin de copier les autres lignes précisées dans la doc car express-session les gère déjà
 
 //? Définir les routes
 app.get('/', (req, res) => {
