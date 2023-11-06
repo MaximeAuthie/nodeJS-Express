@@ -1,7 +1,7 @@
-//? Importer le modèle Album
+//! Importer le modèle Album
 const Album = require('../models/Album');
 
-//? Fonction à exécuter lors de l'appel de la rouute "/albums" contenant la liste des albums
+//! Fonction à exécuter lors de l'appel de la rouute "/albums" contenant la liste des albums
 const albums = async (req, res) => {
 
     //? Récupérer la liste des albums
@@ -14,7 +14,33 @@ const albums = async (req, res) => {
     });
 }
 
-//? Fonction contenant le code à exécuter lors de l'appel de la route parmettant d'afficher la page du formulaire de création d'un album
+//! Fonction à exécuter lors de l'appel de la route "albums/:id"
+const album = async (req, res) => {
+
+    try {
+
+        //? Récupérer 
+        const album = await Album.findById(req.params.id)
+    
+        console.log(album);
+
+        res.render('album', {
+            title: "Album",
+            album: album
+        });
+    
+    //? En cas d'erreur
+    } catch (error) {
+
+        //? Rediriger l'utilisateur vers la page 404
+        console.log(error);
+        res.redirect('/404');
+    }
+    
+}
+
+
+//! Fonction contenant le code à exécuter lors de l'appel de la route parmettant d'afficher la page du formulaire de création d'un album
 const createAlbumForm = (req, res) => {
     res.render('new-album', { 
         title: 'Nouvel album',
@@ -22,7 +48,7 @@ const createAlbumForm = (req, res) => {
     });
 }
 
-//? Fonction à exécuter à la sousmission du formulaire de création d'un album
+//! Fonction à exécuter à la sousmission du formulaire de création d'un album
 const createAlbum = async (req, res) => {
 
     try {
@@ -63,9 +89,10 @@ const createAlbum = async (req, res) => {
     
 }
 
-//? Exporter les fonctions
+//! Exporter les fonctions
 module.exports = {
     albums,
+    album,
     createAlbumForm,
     createAlbum
 }

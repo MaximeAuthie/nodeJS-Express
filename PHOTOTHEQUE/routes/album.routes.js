@@ -10,6 +10,9 @@ const albumController = require('../controllers/album.controller');
 //? Route pour la page quiliste l'ensemble des albums
 router.get('/albums', albumController.albums);
 
+//? Route pour la page d'un album
+router.get('/albums/:id', albumController.album)
+
 //? Route pour la page de création d'un nouvel album
 router.get('/albums/create', albumController.createAlbumForm);
 
