@@ -5,7 +5,7 @@ const app = express();
 //? Importer Express-session
 const session = require('express-session');
 
-//? Importer Flash (pour la gestiond es message d'erreur entre contrôleur et vue)
+//? Importer Flash (pour la gestion des messages d'erreur entre contrôleur et vue)
 const flash = require('connect-flash');
 
 //? Importer Mongoose
