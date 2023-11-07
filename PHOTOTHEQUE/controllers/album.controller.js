@@ -1,6 +1,12 @@
 //! Importer le modèle Album
 const Album = require('../models/Album');
 
+//! Importer path pour les jointures de path
+const path = require ('path');
+
+//! Importer File System pour vérifier si un répertoire existe
+const fs = require('fs');
+
 //! Fonction à exécuter lors de l'appel de la rouute "/albums" contenant la liste des albums
 const albums = async (req, res) => {
 
@@ -21,8 +27,6 @@ const album = async (req, res) => {
 
         //? Récupérer 
         const album = await Album.findById(req.params.id)
-    
-        console.log(album);
 
         res.render('album', {
             title: "Album",
@@ -39,6 +43,32 @@ const album = async (req, res) => {
     
 }
 
+//! Fonction permettant d'uploader une image
+const addImage = async (req, res) => {
+    const album = await Album.findById(req.params.id);
+   
+    //? Stocker le nom de l'image uploadé
+    const imageName = req.files.image.name;
+    
+    //? Stocker le chemin du répertoire de l'album
+    const folderPath = path.join(__dirname, '../public/uploads', album.id);
+
+    //? Stocker le chemin de destination de l'image à uploader
+    const localPath = path.join(folderPath, imageName);
+
+    //? Créer le répertoire de destination de l'image s'il n'existe pas
+    fs.mkdirSync(folderPath, { recursive:true }); //recursive:true => siginifie que si un des dossiers de l'arborescence n'existe pas ( par ex le dossier 'upload'), il le créera aussi
+
+    //? Déplacer l'image grâce à la fonction .mv()
+    await req.files.image.mv(localPath) // ici, image correspond au name de l'input dans la vue
+
+    //? Ajouter le lien de l'image dans la BDD
+    album.images.push(imageName); // on met à jour l'objet js
+    await album.save(); // on sauvegarde les modifications apportées
+
+    //? Rediriger vers la page de l'album (pour rester sur la m^me page)
+    res.redirect(`/albums/${req.params.id}`);
+}
 
 //! Fonction contenant le code à exécuter lors de l'appel de la route parmettant d'afficher la page du formulaire de création d'un album
 const createAlbumForm = (req, res) => {
@@ -93,6 +123,7 @@ const createAlbum = async (req, res) => {
 module.exports = {
     albums,
     album,
+    addImage,
     createAlbumForm,
     createAlbum
 }

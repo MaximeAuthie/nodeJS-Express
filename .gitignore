@@ -1,3 +1,4 @@
+# REPERTOIRES #
 /COURS BITCOIN/node_modules
 /PROJET INIT NPM/node_modules
 /EXPRESS/node_modules
@@ -5,3 +6,8 @@
 /TO-DO-LIST/node_modules
 /MONGOOSE/node_modules
 /PHOTOTHEQUE/node_modules
+
+# EXTENSIONS #
+*.jpeg
+*.jpg
+*.png
