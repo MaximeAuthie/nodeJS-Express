@@ -29,8 +29,9 @@ const album = async (req, res) => {
         const album = await Album.findById(req.params.id)
 
         res.render('album', {
-            title: "Album",
-            album: album
+            title: `Album : ${album.title}`,
+            album: album,
+            errors: req.flash('error') //? dans addImage(), on redirige vers la page /album/:id qui exécute la fonction album => on vient récupérer ici le message d'erreur généré pour le passer à la vue
         });
     
     //? En cas d'erreur
@@ -45,10 +46,29 @@ const album = async (req, res) => {
 
 //! Fonction permettant d'uploader une image
 const addImage = async (req, res) => {
+
+    //? Récupérer les données de l'album concerné
     const album = await Album.findById(req.params.id);
+
+    //? Vérifier si une image a bien été saisie => si non, on génère un message d'erreur
+    if (!req?.files?.image) { // équivalent de if (!req.files || !req.files.image)
+        req.flash('error', 'Veuillez renseigner un fichier');
+        res.redirect(`/albums/${req.params.id}`);
+        return;
+    }
+
+    //? Vérifier le format du fichier uploadé
+    const image = req.files.image;
+    console.log(image);
+
+    if (image.mimetype != 'image/jpeg' && image.mimetype != 'image/png' && image.mimetype != 'image/jpg') {
+        req.flash('error', 'Seuls les formats .jpg, jpeg et png sont acceptés');
+        res.redirect(`/albums/${req.params.id}`);
+        return;
+    }
    
     //? Stocker le nom de l'image uploadé
-    const imageName = req.files.image.name;
+    const imageName = image.name;
     
     //? Stocker le chemin du répertoire de l'album
     const folderPath = path.join(__dirname, '../public/uploads', album.id);
