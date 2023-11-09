@@ -61,7 +61,7 @@ const addImage = async (req, res) => {
     const image = req.files.image;
     console.log(image);
 
-    if (image.mimetype != 'image/jpeg' && image.mimetype != 'image/png' && image.mimetype != 'image/jpg') {
+    if (image.mimetype != 'image/jpeg' && image.mimetype != 'image/png' && image.mimetype != 'image/jpg') { // Quand on console.log "image", on voit ses propriétés y coompris "minetype"
         req.flash('error', 'Seuls les formats .jpg, jpeg et png sont acceptés');
         res.redirect(`/albums/${req.params.id}`);
         return;
@@ -88,6 +88,43 @@ const addImage = async (req, res) => {
 
     //? Rediriger vers la page de l'album (pour rester sur la m^me page)
     res.redirect(`/albums/${req.params.id}`);
+}
+
+//! Fonction permettant de supprimer une image
+const deleteImage = async (req, res) => {
+
+    //? Stocker les paramètres dans des variables
+    const idImage = req.params.idImage;
+    const idAlbum = req.params.idAlbum
+
+    //? Récupérer l'album concerné dans une constante
+    const album = await Album.findById(idAlbum);
+    console.log(album);
+    //? Récupérer l'image concernée
+    console.log(idImage);
+    const image = album.images[idImage];
+
+    //? Vérifier si l'image existe
+    if (!image) {
+
+        //? Rediriger vers l'album
+        res.redirect(`/albums/${idAlbum}`);
+        return;
+    }
+    
+    //? Supprimer l'image du tableau images avec splice()
+    album.images.splice(idImage,1);
+
+    //? Sauvegarder le document (l'album) dans la BDD
+    await album.save();
+
+    //? Supprimer le fichier du répertoire local en utilisant File System et sa méthode unlinkSync()
+    const imagePath = path.join(__dirname, '../public/uploads', idAlbum, image );
+    fs.unlinkSync(imagePath)
+
+    //? Rédiriger l'utilisateur vers la page Album
+    res.redirect(`/albums/${idAlbum}`);
+
 }
 
 //! Fonction contenant le code à exécuter lors de l'appel de la route parmettant d'afficher la page du formulaire de création d'un album
@@ -144,6 +181,7 @@ module.exports = {
     albums,
     album,
     addImage,
+    deleteImage,
     createAlbumForm,
     createAlbum
 }
