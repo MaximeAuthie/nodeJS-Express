@@ -7,12 +7,16 @@ const path = require ('path');
 //! Importer File System pour vérifier si un répertoire existe
 const fs = require('fs');
 
+//! Importer Rimraf pour la suppression récursive des fichiers et de leut contenu
+const {rimraf} = require('rimraf');
+
 //! Fonction à exécuter lors de l'appel de la rouute "/albums" contenant la liste des albums
 const albums = async (req, res) => {
 
     //? Récupérer la liste des albums
     const albums = await Album.find();
     console.log(albums);
+    
     //? Afficher la vue
     res.render('albums', {
         title: "Liste des albums",
@@ -100,6 +104,7 @@ const deleteImage = async (req, res) => {
     //? Récupérer l'album concerné dans une constante
     const album = await Album.findById(idAlbum);
     console.log(album);
+
     //? Récupérer l'image concernée
     console.log(idImage);
     const image = album.images[idImage];
@@ -176,6 +181,23 @@ const createAlbum = async (req, res) => {
     
 }
 
+//! Fonction permettant la suppression d'un album
+const deleteAlbum = async (req, res) => {
+
+    //? Stocker les paramètres de la requête dans une variable
+    const idAlbum = req.params.idAlbum;
+
+    //? Supprimer l'album dans la BDD
+    await Album.findByIdAndDelete(idAlbum);
+
+    //? Supprimer le dossier de l'album et son contenu sur le serveur
+    const albumPath = path.join(__dirname, '../public/uploads', idAlbum);
+    await rimraf(albumPath);
+
+    //? Rediriger l'tuilisateur vers la page album
+    res.redirect('/albums');
+}
+
 //! Exporter les fonctions
 module.exports = {
     albums,
@@ -183,5 +205,6 @@ module.exports = {
     addImage,
     deleteImage,
     createAlbumForm,
-    createAlbum
+    createAlbum,
+    deleteAlbum
 }
