@@ -19,7 +19,7 @@
 
                         <% albums.forEach((album) => { %>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <a href="/albums/<%= album._id%>"><%= album.title %></a>
+                                <a href="/albums/<%= album._id%>"><%= album.title %> (<%= album.images.length %>)</a>
                                 <a href="/albums/<%= album._id %>/delete" class="link-light badge bg-danger rounded-pill">Supprimer</a>
                             </li>
                         <% }); %>
