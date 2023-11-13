@@ -63,9 +63,17 @@ app.get('/', (req, res) => {
     res.redirect('/albums');
 });
 
+// Route appellée en cas de route introuvable
 app.use((req, res) => {
     res.status(404);
     res.send("Page non trouvée");;
+})
+
+// Route appelée automatiquement en cas d'émission d'une erreur (c'est le fait de mettre un argument "err" en premier qui capte les erreur émises par le reste du code)
+app.use((err, req, res, next) => {
+    console.log(err);
+    res.status(500);
+    res.send('Erreur interne du serveur');
 })
 
 //? Ecoute du port 3000

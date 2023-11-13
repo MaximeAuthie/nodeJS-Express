@@ -1,6 +1,9 @@
 //! Importer le modèle Album
 const Album = require('../models/Album');
 
+//! importer le helpers de résolution des erreurs
+const catchAsync = require('../helpers/catchAsync');
+
 //! Importer path pour les jointures de path
 const path = require ('path');
 
@@ -10,22 +13,22 @@ const fs = require('fs');
 //! Importer Rimraf pour la suppression récursive des fichiers et de leut contenu
 const {rimraf} = require('rimraf');
 
-//! Fonction à exécuter lors de l'appel de la rouute "/albums" contenant la liste des albums
-const albums = async (req, res) => {
-
+//! Fonction à exécuter lors de l'appel de la route "/albums" contenant la liste des albums
+const albums = catchAsync(async (req, res) => {
+   
     //? Récupérer la liste des albums
     const albums = await Album.find();
     console.log(albums);
-    
+
     //? Afficher la vue
     res.render('albums', {
         title: "Liste des albums",
         albums: albums
     });
-}
+});
 
 //! Fonction à exécuter lors de l'appel de la route "albums/:id"
-const album = async (req, res) => {
+const album = catchAsync(async (req, res) => {
 
     try {
 
@@ -46,10 +49,10 @@ const album = async (req, res) => {
         res.redirect('/404');
     }
     
-}
+});
 
 //! Fonction permettant d'uploader une image
-const addImage = async (req, res) => {
+const addImage = catchAsync(async (req, res) => {
 
     //? Récupérer les données de l'album concerné
     const album = await Album.findById(req.params.id);
@@ -92,10 +95,10 @@ const addImage = async (req, res) => {
 
     //? Rediriger vers la page de l'album (pour rester sur la m^me page)
     res.redirect(`/albums/${req.params.id}`);
-}
+});
 
 //! Fonction permettant de supprimer une image
-const deleteImage = async (req, res) => {
+const deleteImage = catchAsync(async (req, res) => {
 
     //? Stocker les paramètres dans des variables
     const idImage = req.params.idImage;
@@ -130,18 +133,18 @@ const deleteImage = async (req, res) => {
     //? Rédiriger l'utilisateur vers la page Album
     res.redirect(`/albums/${idAlbum}`);
 
-}
+});
 
 //! Fonction contenant le code à exécuter lors de l'appel de la route parmettant d'afficher la page du formulaire de création d'un album
-const createAlbumForm = (req, res) => {
+const createAlbumForm = catchAsync((req, res) => {
     res.render('new-album', { 
         title: 'Nouvel album',
         errors: req.flash('error') // On fait passer à la vue d'éventuelles erreurs rencontrées (ici lors de la redirection en cas d'erreur de la fonction createAlbum() )
     });
-}
+});
 
 //! Fonction à exécuter à la sousmission du formulaire de création d'un album
-const createAlbum = async (req, res) => {
+const createAlbum = catchAsync(async (req, res) => {
 
     try {
 
@@ -179,10 +182,10 @@ const createAlbum = async (req, res) => {
     
 
     
-}
+});
 
 //! Fonction permettant la suppression d'un album
-const deleteAlbum = async (req, res) => {
+const deleteAlbum = catchAsync(async (req, res) => {
 
     //? Stocker les paramètres de la requête dans une variable
     const idAlbum = req.params.idAlbum;
@@ -196,7 +199,7 @@ const deleteAlbum = async (req, res) => {
 
     //? Rediriger l'tuilisateur vers la page album
     res.redirect('/albums');
-}
+});
 
 //! Exporter les fonctions
 module.exports = {
