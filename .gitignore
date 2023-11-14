@@ -6,6 +6,7 @@
 /TO-DO-LIST/node_modules
 /MONGOOSE/node_modules
 /PHOTOTHEQUE/node_modules
+/API REST/node_modules
 
 # EXTENSIONS #
 *.jpeg
