@@ -5,6 +5,9 @@ const port = 3000;
 //! Importer Express dans le projet
 const express = require('express');
 
+//! Importer http-status-code poour gérer les codes de réponse des api
+const { StatusCodes } = require('http-status-codes');
+
 //! Importer body-parser pour gérer le body des requêtes
 const bodyParser = require('body-parser');
 
@@ -29,11 +32,22 @@ app.get('/', (req, res) => {
     res.send('OK')
 })
 
-app.use('/', contactRoute);
+//? Routage concernant les Contacts
+app.use('/contacts', contactRoute);
 
 app.use( (req, res) => {
-    res.status(404).send('Route non trouvée.')
+    res
+        .status(StatusCodes.NOT_FOUND)
+        .send('Route non trouvée.')
 });
+
+//! Ecouter les erreurs émisent par le middleware de gestion des erreurs
+app.use((err, req, res, next) => {
+    console.log(err);
+    res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send('Erreur interne du serveur');
+})
 
 //! Ecouter le port
 app.listen(3000, () => {
